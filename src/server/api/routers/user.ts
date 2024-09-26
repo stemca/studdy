@@ -1,32 +1,13 @@
 import { hash, verify } from "@node-rs/argon2";
 import { TRPCError } from "@trpc/server";
-import { db as database } from "~/server/db";
-import { userTable, verificationCodeTable } from "~/server/db/schema";
-import { signInSchema } from "~/validators/sign-in";
-import { signUpSchema } from "~/validators/sign-up";
 import { eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 
+import { userTable } from "~/server/db/schema";
+import { signInSchema } from "~/validators/sign-in";
+import { signUpSchema } from "~/validators/sign-up";
+import { generateEmailVerificationCode } from "../helpers/code";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-
-const generateEmailVerificationCode = async (
-  userId: string,
-  email: string,
-): Promise<string> => {
-  await database
-    .delete(verificationCodeTable)
-    .where(eq(verificationCodeTable.userId, userId));
-
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-  await database.insert(verificationCodeTable).values({
-    userId,
-    email,
-    code,
-    expiresAt: Math.floor(Date.now() / 1000) + 15 * 60,
-  });
-  return code;
-};
 
 export const userRouter = createTRPCRouter({
   signUp: publicProcedure
@@ -61,9 +42,8 @@ export const userRouter = createTRPCRouter({
         password: passwordHash,
       });
 
-      // create entry in verify table
       const code = await generateEmailVerificationCode(userId, email);
-      // send verification email
+      // @TODO: send verification email
     }),
   signIn: publicProcedure
     .input(signInSchema)
@@ -109,7 +89,7 @@ export const userRouter = createTRPCRouter({
           existingUser.id,
           existingUser.email,
         );
-        // send email
+        // @TODO: send email
         return;
       }
       // then create session

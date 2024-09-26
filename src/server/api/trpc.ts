@@ -7,9 +7,10 @@
  * need to use are documented accordingly near the end.
  */
 import { initTRPC } from "@trpc/server";
-import { db } from "~/server/db";
 import superjson from "superjson";
 import { ZodError } from "zod";
+
+import { db } from "~/server/db";
 
 /**
  * 1. CONTEXT
