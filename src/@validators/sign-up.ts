@@ -4,10 +4,14 @@ const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
 export const signUpSchema = z.object({
   email: z
-    .string({ required_error: "Email address required" })
+    .string()
+    .trim()
+    .min(1, { message: "Email address is required" })
     .email({ message: "Invalid email address" }),
   password: z
     .string()
+    .trim()
+    .min(1, { message: "Password is required" })
     .regex(regex, {
       message:
         "Password must contain at mix of lowercase and uppercase ketters, one number, and one special character.",

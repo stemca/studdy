@@ -3,12 +3,23 @@ import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 
+import { signInSchema } from "~/@validators/sign-in";
+import { signUpSchema } from "~/@validators/sign-up";
+import { createSession, generateSessionToken } from "~/server/auth";
 import { userTable } from "~/server/db/schema";
-import { signInSchema } from "~/validators/sign-in";
-import { signUpSchema } from "~/validators/sign-up";
 import { generateEmailVerificationCode } from "../helpers/code";
+import { sendVerificationEmail } from "../helpers/email";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
+/**
+ * User and authentication methods
+ * signUp
+ * signIn
+ * signOut
+ * verifyEmail
+ * forgotPassword
+ * resetPassword
+ */
 export const userRouter = createTRPCRouter({
   signUp: publicProcedure
     .input(signUpSchema)
@@ -43,7 +54,8 @@ export const userRouter = createTRPCRouter({
       });
 
       const code = await generateEmailVerificationCode(userId, email);
-      // @TODO: send verification email
+
+      await sendVerificationEmail({ email, code });
     }),
   signIn: publicProcedure
     .input(signInSchema)
@@ -89,12 +101,13 @@ export const userRouter = createTRPCRouter({
           existingUser.id,
           existingUser.email,
         );
-        // @TODO: send email
+        await sendVerificationEmail({ email, code });
         return;
       }
       // then create session
+      const sessionToken = generateSessionToken();
+      const session = await createSession(sessionToken, existingUser.id);
+
+      return session;
     }),
-  // oauth sign in
-  // sign out, destroy the session
-  // sign out everywhere
 });

@@ -1,12 +1,10 @@
-import { api } from "~/trpc/server";
+import { RegisterForm } from "./form";
 
-export default async function RegisterPage() {
+export default function RegisterPage() {
   return (
-    <div>
-      <h1>Create an account</h1>
-      <form action={signUp}></form>
+    <div className="flex h-screen w-screen flex-col items-center justify-center">
+      <h1 className="text-2xl tracking-tight">Create an account</h1>
+      <RegisterForm />
     </div>
   );
 }
-
-async function signUp() {}

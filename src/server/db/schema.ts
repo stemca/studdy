@@ -1,13 +1,8 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
-import {
-  index,
-  integer,
-  sqliteTableCreator,
-  text,
-} from "drizzle-orm/sqlite-core";
+import { InferSelectModel, sql } from "drizzle-orm";
+import { integer, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -16,23 +11,6 @@ import {
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = sqliteTableCreator((name) => `studdy_${name}`);
-
-export const posts = createTable(
-  "post",
-  {
-    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: text("name", { length: 256 }),
-    createdAt: integer("created_at", { mode: "timestamp" })
-      .default(sql`(unixepoch())`)
-      .notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
 
 export const userTable = createTable("user", {
   id: text("id", { length: 255 }).primaryKey(),
@@ -51,12 +29,6 @@ export const userTable = createTable("user", {
 
 export const sessionTable = createTable("session", {
   id: text("id", { length: 255 }).primaryKey(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .default(sql`(unixepoch())`)
-    .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
-    () => new Date(),
-  ),
 
   userId: text("user_id", { length: 255 })
     .notNull()
@@ -75,5 +47,7 @@ export const verificationCodeTable = createTable("verification_code", {
   expiresAt: integer("expires_at").notNull(),
 });
 
+export type User = InferSelectModel<typeof userTable>;
+export type Session = InferSelectModel<typeof sessionTable>;
 // course table
 // assignment table
