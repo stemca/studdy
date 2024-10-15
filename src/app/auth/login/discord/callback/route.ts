@@ -30,8 +30,7 @@ export async function GET(request: Request): Promise<Response> {
         Authorization: `Bearer ${tokens.accessToken}`,
       },
     });
-    const discordUser: DiscordUser = await response.json();
-    console.log(discordUser);
+    const discordUser = (await response.json()) as DiscordUser;
 
     // if account already exists, return
     const existingAccount = await db.query.accountsTable.findFirst({
