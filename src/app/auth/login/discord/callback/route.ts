@@ -52,6 +52,38 @@ export async function GET(request: Request): Promise<Response> {
       });
     }
 
+    // if user exists, append to user table
+    const existingUser = await db.query.userTable.findFirst({
+      where: eq(userTable.email, discordUser.email),
+    });
+    if (existingUser) {
+      await db.insert(accountsTable).values({
+        providerId: "discord",
+        providerUserId: discordUser.id,
+        userId: existingUser.id,
+      });
+      // if email is not verified, verify now
+      if (!existingUser.emailVerified) {
+        await db
+          .update(userTable)
+          .set({
+            emailVerified: true,
+          })
+          .where(eq(userTable.id, existingUser.id));
+      }
+
+      const sessionToken = generateSessionToken();
+      const session = await createSession(sessionToken, existingUser.id);
+      setSessionCookie(sessionToken, session.expiresAt);
+
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: "/home",
+        },
+      });
+    }
+
     await db.transaction(async (tx) => {
       const user = await tx
         .insert(userTable)
@@ -85,7 +117,7 @@ export async function GET(request: Request): Promise<Response> {
     // this shouldn't happen
     if (!user) {
       return new Response(null, {
-        status: 302,
+        status: 404,
         headers: {
           Location: "/",
         },
