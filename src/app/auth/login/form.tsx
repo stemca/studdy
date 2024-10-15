@@ -96,7 +96,7 @@ export default function LoginForm() {
             />
             <SubmitButton
               className="w-full"
-              title="Sign up"
+              title="Sign in"
               disabled={Object.keys(form.formState.errors).length > 0}
             />
           </form>

@@ -108,7 +108,7 @@ export function RegisterForm() {
         <Button asChild className="w-full">
           <Link href="/auth/login/discord" prefetch={false}>
             <DiscordLogoIcon className="mr-3 h-5 w-5" />
-            Login with Discord
+            Sign up with Discord
           </Link>
         </Button>
       </CardFooter>
