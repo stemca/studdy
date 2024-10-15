@@ -15,6 +15,8 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
+  console.log(`code ${code}`);
+  console.log(`state ${state}`);
 
   const storedState = cookies().get("discord_oauth_state")?.value ?? null;
   if (!code || !state || !storedState || state !== storedState) {
@@ -25,6 +27,8 @@ export async function GET(request: Request): Promise<Response> {
 
   try {
     const tokens = await discord.validateAuthorizationCode(code);
+    console.log(`tokens: ${JSON.stringify(tokens)}`);
+
     const response = await fetch("https://discord.com/api/users/@me", {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
