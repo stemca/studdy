@@ -17,8 +17,10 @@ const createContext = cache(() => {
   const heads = new Headers(headers());
   heads.set("x-trpc-source", "rsc");
 
+  // grab cookie from local storage
   return createTRPCContext({
     headers: heads,
+    sessionToken: "",
   });
 });
 

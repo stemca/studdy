@@ -5,9 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
+import type { SignUpType } from "./schema";
 import type { ActionState } from "~/@types/action-state";
-import type { SignUpType } from "~/@validators/sign-up";
-import { signUpSchema } from "~/@validators/sign-up";
 import SubmitButton from "~/app/_components/submit-btn";
 import { Card, CardContent } from "~/components/ui/card";
 import {
@@ -21,6 +20,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { useToast } from "~/hooks/use-toast";
 import { registerAction } from "./actions";
+import { signUpSchema } from "./schema";
 
 const initialState: ActionState = {
   message: undefined,
@@ -94,10 +94,7 @@ export function RegisterForm() {
             <SubmitButton
               className="w-full"
               title="Sign up"
-              disabled={
-                form.formState.errors.email !== undefined ||
-                form.formState.errors.password !== undefined
-              }
+              disabled={Object.keys(form.formState.errors).length > 0}
             />
           </form>
         </Form>

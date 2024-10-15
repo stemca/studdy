@@ -1,20 +1,19 @@
 import { hash, verify } from "@node-rs/argon2";
 import { TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
-import { signInSchema, signUpSchema } from "~/@validators";
+import { signInSchema } from "~/app/auth/login/schema";
+import { signUpSchema } from "~/app/auth/register/schema";
+import { verifyEmailSchema } from "~/app/auth/verify-email/schema";
 import { createSession, generateSessionToken } from "~/server/auth";
 import { userTable, verificationCodeTable } from "~/server/db/schema";
 import { generateEmailVerificationCode } from "../helpers/code";
 import { sendVerificationEmail } from "../helpers/email";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { authedProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 
 /**
  * User and authentication methods
- * signUp
- * signIn
  * signOut
- * verifyEmail
  * forgotPassword
  * resetPassword
  */
@@ -137,6 +136,52 @@ export const userRouter = createTRPCRouter({
       const sessionToken = generateSessionToken();
       const session = await createSession(sessionToken, existingUser.id);
 
-      return session;
+      return { session, sessionToken };
+    }),
+  verifyEmail: publicProcedure
+    .input(verifyEmailSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { db } = ctx;
+
+      const verificationCode = await db.query.verificationCodeTable.findFirst({
+        where: and(
+          eq(verificationCodeTable.email, input.email),
+          eq(verificationCodeTable.code, input.code),
+        ),
+      });
+      console.log(verificationCode);
+
+      if (!verificationCode) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Incorrect verification code.",
+        });
+      }
+
+      if (verificationCode.expiresAt < Math.floor(Date.now() / 1000)) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Verification code has expired.",
+        });
+      }
+
+      await db
+        .update(userTable)
+        .set({
+          emailVerified: true,
+        })
+        .where(eq(userTable.email, input.email));
+
+      await db
+        .delete(verificationCodeTable)
+        .where(eq(verificationCodeTable.id, verificationCode.id));
+
+      const sessionToken = generateSessionToken();
+      const session = await createSession(
+        sessionToken,
+        verificationCode.userId,
+      );
+
+      return { session, sessionToken };
     }),
 });

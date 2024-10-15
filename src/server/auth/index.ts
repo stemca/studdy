@@ -3,6 +3,7 @@ import {
   encodeHexLowerCase,
 } from "@oslojs/encoding";
 import { eq } from "drizzle-orm";
+import { cookies } from "next/headers";
 
 import type { Session, User } from "~/server/db/schema";
 import { db } from "~/server/db";
@@ -65,6 +66,16 @@ export const validateSessionToken = async (
 
 export async function invalidateSession(sessionId: string): Promise<void> {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+}
+
+export function setSessionCookie(token: string, expiresAt: number) {
+  cookies().set("studdy_session", token, {
+    httpOnly: true,
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    expires: expiresAt,
+  });
 }
 
 export type SessionValidationResult =

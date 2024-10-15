@@ -3,16 +3,17 @@
 import { TRPCError } from "@trpc/server";
 import { redirect } from "next/navigation";
 
-import type { ActionState } from "~/@types/action-state";
+import { ActionState } from "~/@types/action-state";
+import { setSessionCookie } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { signUpSchema } from "./schema";
+import { verifyEmailSchema } from "./schema";
 
-export const registerAction = async (
+export const verifyEmailAction = async (
   _prevState: ActionState,
   data: FormData,
 ): Promise<ActionState> => {
   const formData = Object.fromEntries(data);
-  const parsed = signUpSchema.safeParse(formData);
+  const parsed = verifyEmailSchema.safeParse(formData);
 
   if (!parsed.success) {
     const fields: Record<string, string> = {};
@@ -27,8 +28,12 @@ export const registerAction = async (
   }
 
   try {
-    const { email, password } = parsed.data;
-    await api.user.signUp({ email, password });
+    const { code, email } = parsed.data;
+    const { session, sessionToken } = await api.user.verifyEmail({
+      code,
+      email,
+    });
+    setSessionCookie(sessionToken, session.expiresAt);
   } catch (error) {
     if (error instanceof TRPCError) {
       return { message: error.message };
@@ -37,5 +42,5 @@ export const registerAction = async (
     return { message: "Something went wrong, please try again later." };
   }
 
-  redirect(`/auth/verify-email?email=${parsed.data.email}`);
+  redirect("/home");
 };
