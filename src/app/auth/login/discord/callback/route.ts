@@ -1,4 +1,4 @@
-import { DiscordTokens, OAuth2RequestError } from "arctic";
+import { OAuth2RequestError } from "arctic";
 import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 
