@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect, useSearchParams } from "next/navigation";
 import { useFormState } from "react-dom";
@@ -31,7 +31,7 @@ const initialState: ActionState = {
   message: undefined,
 };
 
-export default function VerifyEmailForm() {
+function VerifyForm() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -93,5 +93,13 @@ export default function VerifyEmailForm() {
         <SubmitButton title="Submit" />
       </form>
     </Form>
+  );
+}
+
+export default function VerifyEmailForm() {
+  return (
+    <Suspense>
+      <VerifyForm />
+    </Suspense>
   );
 }
