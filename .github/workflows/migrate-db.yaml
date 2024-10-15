@@ -1,6 +1,5 @@
 name: Apply schema migrations
 
-# 👉 Only run this workflow when a change is made to the main branch
 on:
   push:
     branches:
@@ -26,8 +25,8 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo DATABASE_URL=${{ secrets.DATABASE_URL }} > .env |
-          echo AUTH_TOKEN=${{ secrets.AUTH_TOKEN }} > .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo AUTH_TOKEN=${{ secrets.AUTH_TOKEN }} >> .env
 
       - name: Install dependencies
         run: pnpm i
