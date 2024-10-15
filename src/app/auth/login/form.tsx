@@ -103,8 +103,6 @@ export default function LoginForm() {
         </Form>
       </CardContent>
       <CardFooter className="flex flex-col space-y-5">
-        <Separator />
-
         <Button asChild className="w-full">
           <Link href="/auth/login/discord" prefetch={false}>
             <DiscordLogoIcon className="mr-3 h-5 w-5" />
