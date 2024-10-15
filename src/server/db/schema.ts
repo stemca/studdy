@@ -2,8 +2,10 @@ import type { InferSelectModel } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
 import {
+  index,
   integer,
   primaryKey,
+  real,
   sqliteTableCreator,
   text,
 } from "drizzle-orm/sqlite-core";
@@ -74,10 +76,66 @@ export const accountsTable = createTable(
   }),
 );
 
+export const coursesTable = createTable(
+  "course",
+  {
+    id: text("id", { length: 255 })
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    name: text("name", { length: 255 }).notNull(),
+    description: text("description"), // optional
+    startDate: integer("start_date", { mode: "timestamp" }).notNull(),
+    endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+    credits: real("credits"), // optional,
+    code: text("code", { length: 255 }), // optional
+    userId: text("user_id", { length: 255 }).references(() => userTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  },
+  (table) => {
+    return {
+      userIdIdx: index("course_user_id_idx").on(table.userId),
+    };
+  },
+);
+
+export const assignmentsTable = createTable(
+  "assignment",
+  {
+    id: text("id", { length: 255 })
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    name: text("name", { length: 255 }).notNull(),
+    description: text("description", { length: 255 }), // optional
+    dueDate: integer("due_date", { mode: "timestamp" }).notNull(),
+    points: integer("points").notNull(),
+    type: text("type", {
+      enum: ["homework", "quiz", "project", "exam"],
+    }).notNull(),
+    userId: text("user_id", { length: 255 }).references(() => userTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+    courseId: text("course_id", { length: 255 }).references(
+      () => coursesTable.id,
+      {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      },
+    ),
+  },
+  (table) => {
+    return {
+      userIdIdx: index("assignment_user_id_idx").on(table.userId),
+      courseIdIdx: index("assignment_course_id_idx").on(table.courseId),
+    };
+  },
+);
+
 export type User = InferSelectModel<typeof userTable>;
 export type Session = InferSelectModel<typeof sessionTable>;
 export type VerificationCode = InferSelectModel<typeof verificationCodeTable>;
 export type Account = InferSelectModel<typeof accountsTable>;
-
-// course table
-// assignment table
+export type Course = InferSelectModel<typeof coursesTable>;
+export type Assignment = InferSelectModel<typeof assignmentsTable>;
