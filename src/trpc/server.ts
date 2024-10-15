@@ -2,7 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import type { AppRouter } from "~/server/api/root";
 import { createCaller } from "~/server/api/root";
@@ -17,10 +17,11 @@ const createContext = cache(() => {
   const heads = new Headers(headers());
   heads.set("x-trpc-source", "rsc");
 
-  // grab cookie from local storage
+  const token = cookies().get("studdy_session");
+
   return createTRPCContext({
     headers: heads,
-    sessionToken: "",
+    sessionToken: token?.value,
   });
 });
 
