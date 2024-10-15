@@ -1,4 +1,4 @@
-import { OAuth2RequestError } from "arctic";
+import { DiscordTokens, OAuth2RequestError } from "arctic";
 import { and, eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 
@@ -15,11 +15,8 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  console.log(`code ${code}`);
-  console.log(`state ${state}`);
 
   const storedState = cookies().get("discord_oauth_state")?.value ?? null;
-  console.log(`stored state ${storedState}`);
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
@@ -28,7 +25,6 @@ export async function GET(request: Request): Promise<Response> {
 
   try {
     const tokens = await discord.validateAuthorizationCode(code);
-    console.log(`tokens: ${JSON.stringify(tokens)}`);
 
     const response = await fetch("https://discord.com/api/users/@me", {
       headers: {
@@ -36,7 +32,7 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
     const discordUser = (await response.json()) as DiscordUser;
-    console.log(discordUser);
+
     // if account already exists, return
     const existingAccount = await db.query.accountsTable.findFirst({
       where: and(
@@ -108,8 +104,6 @@ export async function GET(request: Request): Promise<Response> {
     });
   } catch (e) {
     if (e instanceof OAuth2RequestError) {
-      console.error("oauth2 request error");
-      console.error(e);
       return new Response(null, {
         status: 400,
       });
