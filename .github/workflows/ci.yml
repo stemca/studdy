@@ -24,7 +24,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Lint
-        run: pnpm lint
+        run: SKIP_ENV_VALIDATION=1 pnpm lint
 
   format:
     runs-on: ubuntu-latest

@@ -14,6 +14,8 @@ const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "studdy club",
+  description: "studdy smarter, not harder",
+  applicationName: "studdy club",
 };
 
 export default function RootLayout({

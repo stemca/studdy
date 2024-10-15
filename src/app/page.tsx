@@ -10,7 +10,7 @@ export default function Home() {
           stüddy club
         </h1>
         <p className="my-12 mt-8 text-lg font-normal leading-relaxed md:text-xl lg:text-2xl lg:leading-relaxed">
-          study smarter, not harder.
+          studdy smarter, not harder.
         </p>
         <Link href="/auth/register">
           <Button

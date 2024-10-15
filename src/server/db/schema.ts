@@ -1,7 +1,12 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
-import { integer, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
+import {
+  integer,
+  primaryKey,
+  sqliteTableCreator,
+  text,
+} from "drizzle-orm/sqlite-core";
 
 export const createTable = sqliteTableCreator((name) => `studdy_${name}`);
 
@@ -52,9 +57,27 @@ export const verificationCodeTable = createTable("verification_code", {
   expiresAt: integer("expires_at").notNull(),
 });
 
+export const accountsTable = createTable(
+  "account",
+  {
+    providerId: text("provider_id", { length: 255 }).notNull(),
+    providerUserId: text("provider_user_id", { length: 255 }).notNull(),
+    userId: text("user_id", { length: 255 })
+      .notNull()
+      .references(() => userTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.providerId, table.providerUserId] }),
+  }),
+);
+
 export type User = InferSelectModel<typeof userTable>;
 export type Session = InferSelectModel<typeof sessionTable>;
-export type VerificationcODE = InferSelectModel<typeof verificationCodeTable>;
+export type VerificationCode = InferSelectModel<typeof verificationCodeTable>;
+export type Account = InferSelectModel<typeof accountsTable>;
 
 // course table
 // assignment table

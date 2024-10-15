@@ -2,13 +2,16 @@
 
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DiscordLogoIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
 import type { SignInType } from "./schema";
 import type { ActionState } from "~/@types/action-state";
 import SubmitButton from "~/app/_components/submit-btn";
-import { Card, CardContent } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import {
   Form,
   FormControl,
@@ -18,6 +21,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Separator } from "~/components/ui/separator";
 import { useToast } from "~/hooks/use-toast";
 import { loginAction } from "./actions";
 import { signInSchema } from "./schema";
@@ -52,7 +56,7 @@ export default function LoginForm() {
     <Card className="w-full max-w-lg">
       <CardContent>
         <Form {...form}>
-          <form action={formAction} className="w-full space-y-8 px-4 py-3">
+          <form action={formAction} className="space-y-4 pt-4">
             <FormField
               control={form.control}
               name="email"
@@ -98,7 +102,16 @@ export default function LoginForm() {
           </form>
         </Form>
       </CardContent>
-      {/* @TODO: create oauth logins with google and discord */}
+      <CardFooter className="flex flex-col space-y-5">
+        <Separator />
+
+        <Button asChild className="w-full">
+          <Link href="/auth/login/discord" prefetch={false}>
+            <DiscordLogoIcon className="mr-3 h-5 w-5" />
+            Login with Discord
+          </Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
