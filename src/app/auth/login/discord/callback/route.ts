@@ -26,7 +26,7 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const tokens = await discord.validateAuthorizationCode(code);
 
-    const response = await fetch("https://discord.com/api/users/@me", {
+    const response = await fetch("https://discord.com/api/v10/users/@me", {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
       },
