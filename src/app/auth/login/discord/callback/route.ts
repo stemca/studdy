@@ -19,6 +19,7 @@ export async function GET(request: Request): Promise<Response> {
   console.log(`state ${state}`);
 
   const storedState = cookies().get("discord_oauth_state")?.value ?? null;
+  console.log(`stored state ${storedState}`);
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
@@ -106,8 +107,9 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
   } catch (e) {
-    console.error(e);
     if (e instanceof OAuth2RequestError) {
+      console.error("oauth2 request error");
+      console.error(e);
       return new Response(null, {
         status: 400,
       });
