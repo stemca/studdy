@@ -1,5 +1,7 @@
 import "~/styles/globals.css";
 
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { type Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 
@@ -25,6 +27,8 @@ export default function RootLayout({
             {children}
             <ThemeSwitcher />
             <Toaster />
+            <SpeedInsights />
+            <Analytics />
           </ThemeProvider>
         </TRPCReactProvider>
       </body>

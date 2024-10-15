@@ -34,6 +34,3 @@ jobs:
 
       - name: Apply migrations
         run: SKIP_ENV_VALIDATION=1 pnpm db:migrate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
