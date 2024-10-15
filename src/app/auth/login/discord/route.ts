@@ -5,9 +5,8 @@ import { discord } from "~/server/auth/discord";
 
 export async function GET(): Promise<Response> {
   const state = generateState();
-  const url = await discord.createAuthorizationURL(state, {
-    scopes: ["email"],
-  });
+  const scopes = ["email", "identify"];
+  const url = await discord.createAuthorizationURL(state, { scopes });
 
   cookies().set("discord_oauth_state", state, {
     path: "/",
