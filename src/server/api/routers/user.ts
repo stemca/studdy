@@ -13,7 +13,6 @@ import { authedProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 
 /**
  * User and authentication methods
- * signOut
  * forgotPassword
  * resetPassword
  */

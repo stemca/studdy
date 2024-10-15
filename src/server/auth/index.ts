@@ -1,3 +1,4 @@
+import { cache } from "react";
 import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
@@ -64,11 +65,11 @@ export const validateSessionToken = async (
   return { session, user };
 };
 
-export async function invalidateSession(sessionId: string): Promise<void> {
+export const invalidateSession = async (sessionId: string): Promise<void> => {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
-}
+};
 
-export function setSessionCookie(token: string, expiresAt: number) {
+export const setSessionCookie = (token: string, expiresAt: number) => {
   cookies().set("studdy_session", token, {
     httpOnly: true,
     path: "/",
@@ -76,7 +77,28 @@ export function setSessionCookie(token: string, expiresAt: number) {
     sameSite: "lax",
     expires: expiresAt,
   });
-}
+};
+
+export const getCurrentSession = cache(
+  async (): Promise<SessionValidationResult> => {
+    const token = cookies().get("studdy_session")?.value ?? null;
+    if (token === null) {
+      return { session: null, user: null };
+    }
+    const result = await validateSessionToken(token);
+    return result;
+  },
+);
+
+export const deleteSessionCookie = (): void => {
+  cookies().set("studdy_session", "", {
+    httpOnly: true,
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 0,
+  });
+};
 
 export type SessionValidationResult =
   | { session: Session; user: User }
