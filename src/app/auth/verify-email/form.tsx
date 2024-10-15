@@ -6,7 +6,8 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
-import { ActionState } from "~/@types/action-state";
+import type { VerifyEmailType } from "./schema";
+import type { ActionState } from "~/@types/action-state";
 import SubmitButton from "~/app/_components/submit-btn";
 import {
   Form,
@@ -24,7 +25,7 @@ import {
 } from "~/components/ui/input-otp";
 import { useToast } from "~/hooks/use-toast";
 import { verifyEmailAction } from "./actions";
-import { verifyEmailSchema, VerifyEmailType } from "./schema";
+import { verifyEmailSchema } from "./schema";
 
 const initialState: ActionState = {
   message: undefined,
@@ -58,7 +59,7 @@ export default function VerifyEmailForm() {
         variant: "destructive",
       });
     }
-  }, [state]);
+  }, [state, toast]);
 
   return (
     <Form {...form}>

@@ -1,16 +1,10 @@
 "use client";
 
+import type { Root as LabelPrimitive } from "@radix-ui/react-label";
+import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
 import * as React from "react";
-import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
-import {
-  Controller,
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-  FormProvider,
-  useFormContext,
-} from "react-hook-form";
+import { Controller, FormProvider, useFormContext } from "react-hook-form";
 
 import { Label } from "~/components/ui/label";
 import { cn } from "~/lib/utils";
@@ -87,8 +81,8 @@ const FormItem = React.forwardRef<
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+  React.ElementRef<typeof LabelPrimitive>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive>
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 

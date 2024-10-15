@@ -2,7 +2,7 @@
 
 import { useFormState } from "react-dom";
 
-import { ActionState } from "~/@types/action-state";
+import type { ActionState } from "~/@types/action-state";
 import { logoutAction } from "~/app/actions";
 import SubmitButton from "./submit-btn";
 

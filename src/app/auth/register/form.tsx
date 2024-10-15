@@ -47,7 +47,7 @@ export function RegisterForm() {
         variant: "destructive",
       });
     }
-  }, [state]);
+  }, [toast, state]);
 
   return (
     <Card className="w-full max-w-lg">

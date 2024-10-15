@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { ActionState } from "~/@types/action-state";
+import type { ActionState } from "~/@types/action-state";
 import {
   deleteSessionCookie,
   getCurrentSession,

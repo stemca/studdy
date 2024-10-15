@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
-import { ActionState } from "~/@types/action-state";
+import type { SignInType } from "./schema";
+import type { ActionState } from "~/@types/action-state";
 import SubmitButton from "~/app/_components/submit-btn";
 import { Card, CardContent } from "~/components/ui/card";
 import {
@@ -19,7 +20,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { useToast } from "~/hooks/use-toast";
 import { loginAction } from "./actions";
-import { signInSchema, SignInType } from "./schema";
+import { signInSchema } from "./schema";
 
 const initialState: ActionState = {
   message: undefined,
@@ -45,7 +46,7 @@ export default function LoginForm() {
         variant: "destructive",
       });
     }
-  }, [state]);
+  }, [toast, state]);
 
   return (
     <Card className="w-full max-w-lg">

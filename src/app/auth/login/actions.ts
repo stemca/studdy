@@ -18,7 +18,9 @@ export const loginAction = async (
   if (!parsed.success) {
     const fields: Record<string, string> = {};
     for (const key of Object.keys(formData)) {
-      fields[key] = formData[key] ? formData[key].toString() : `Invalid field`;
+      fields[key] = formData[key]
+        ? JSON.stringify(formData[key])
+        : "Invalid field";
     }
     return {
       message: "Invalid form data",

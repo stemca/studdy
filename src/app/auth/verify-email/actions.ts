@@ -3,7 +3,7 @@
 import { TRPCError } from "@trpc/server";
 import { redirect } from "next/navigation";
 
-import { ActionState } from "~/@types/action-state";
+import type { ActionState } from "~/@types/action-state";
 import { setSessionCookie } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { verifyEmailSchema } from "./schema";
@@ -18,7 +18,9 @@ export const verifyEmailAction = async (
   if (!parsed.success) {
     const fields: Record<string, string> = {};
     for (const key of Object.keys(formData)) {
-      fields[key] = formData[key] ? formData[key].toString() : `Invalid field`;
+      fields[key] = formData[key]
+        ? JSON.stringify(formData[key])
+        : "Invalid field";
     }
     return {
       message: "Invalid form data",

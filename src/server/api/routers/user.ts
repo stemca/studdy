@@ -9,7 +9,7 @@ import { createSession, generateSessionToken } from "~/server/auth";
 import { userTable, verificationCodeTable } from "~/server/db/schema";
 import { generateEmailVerificationCode } from "../helpers/code";
 import { sendVerificationEmail } from "../helpers/email";
-import { authedProcedure, createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 /**
  * User and authentication methods
