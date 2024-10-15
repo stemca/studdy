@@ -17,7 +17,7 @@ export const registerAction = async (
   if (!parsed.success) {
     const fields: Record<string, string> = {};
     for (const key of Object.keys(formData)) {
-      fields[key] = formData[key] ? formData[key].toString() : `Invalid ${key}`;
+      fields[key] = formData[key] ? formData[key].toString() : `Invalid field`;
     }
     return {
       message: "Invalid form data",
@@ -29,7 +29,6 @@ export const registerAction = async (
   try {
     const { email, password } = parsed.data;
     await api.user.signUp({ email, password });
-    return redirect("/auth/verify-email");
   } catch (error) {
     if (error instanceof TRPCError) {
       return { message: error.message };
@@ -37,4 +36,6 @@ export const registerAction = async (
 
     return { message: "Something went wrong, please try again later." };
   }
+
+  redirect("/auth/verify-email");
 };

@@ -1,19 +1,14 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
-import { InferSelectModel, sql } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
+import { createId } from "@paralleldrive/cuid2";
+import { sql } from "drizzle-orm";
 import { integer, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
 export const createTable = sqliteTableCreator((name) => `studdy_${name}`);
 
 export const userTable = createTable("user", {
-  id: text("id", { length: 255 }).primaryKey(),
+  id: text("id", { length: 255 })
+    .primaryKey()
+    .$defaultFn(() => createId()),
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(unixepoch())`)
     .notNull(),
@@ -28,26 +23,38 @@ export const userTable = createTable("user", {
 });
 
 export const sessionTable = createTable("session", {
-  id: text("id", { length: 255 }).primaryKey(),
+  id: text("id", { length: 255 })
+    .primaryKey()
+    .$defaultFn(() => createId()),
 
   userId: text("user_id", { length: 255 })
     .notNull()
-    .references(() => userTable.id),
+    .references(() => userTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   expiresAt: integer("expires_at").notNull(),
 });
 
 export const verificationCodeTable = createTable("verification_code", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+  id: text("id", { length: 255 })
+    .primaryKey()
+    .$defaultFn(() => createId()),
   code: text("code").notNull(),
   userId: text("user_id", { length: 255 })
     .unique()
     .notNull()
-    .references(() => userTable.id),
+    .references(() => userTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   email: text("email", { length: 255 }).notNull(),
   expiresAt: integer("expires_at").notNull(),
 });
 
 export type User = InferSelectModel<typeof userTable>;
 export type Session = InferSelectModel<typeof sessionTable>;
+export type VerificationcODE = InferSelectModel<typeof verificationCodeTable>;
+
 // course table
 // assignment table

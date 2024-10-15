@@ -15,7 +15,7 @@ export const sendVerificationEmail = async ({
   code,
 }: SendVerificationEmailParams) => {
   return await resend.emails.send({
-    from: "studdy <no-reply@studdy.com>",
+    from: "studdy <no-reply@studdy.club>",
     to: [email],
     subject: "Verify your email address",
     react: VerifyEmail({ email, code }),

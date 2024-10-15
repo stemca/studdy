@@ -14,7 +14,7 @@ export const signUpSchema = z.object({
     .min(1, { message: "Password is required" })
     .regex(regex, {
       message:
-        "Password must contain at mix of lowercase and uppercase ketters, one number, and one special character.",
+        "Password must contain at mix of lowercase and uppercase letters, one number, and one special character.",
     })
     .min(8, { message: "Password must be between 8 and 32 characters." })
     .max(32, {

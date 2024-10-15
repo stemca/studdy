@@ -6,7 +6,7 @@ interface VerifyEmailProps {
 export const VerifyEmail: React.FC<VerifyEmailProps> = ({ email, code }) => {
   return (
     <div>
-      <h1>Welcome, {email}!</h1>
+      <p>Welcome, {email}!</p>
       <p>
         Your email verification code is <strong>{code}</strong>
       </p>
