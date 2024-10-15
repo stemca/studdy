@@ -103,13 +103,21 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
   } catch (e) {
+    console.error(e);
     if (e instanceof OAuth2RequestError) {
       return new Response(null, {
         status: 400,
+        headers: {
+          Location: "/",
+        },
       });
     }
+
     return new Response(null, {
       status: 500,
+      headers: {
+        Location: "/",
+      },
     });
   }
 }
