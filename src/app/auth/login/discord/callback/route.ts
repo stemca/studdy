@@ -31,7 +31,7 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
     const discordUser = (await response.json()) as DiscordUser;
-
+    console.log(discordUser);
     // if account already exists, return
     const existingAccount = await db.query.accountsTable.findFirst({
       where: and(
