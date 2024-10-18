@@ -10,11 +10,15 @@ const initialState: ActionState = {
   message: undefined,
 };
 
-export function LogoutButton() {
+interface LogoutButtonProps {
+  className?: string;
+}
+
+export function LogoutButton({ className }: LogoutButtonProps) {
   const [, action] = useFormState(logoutAction, initialState);
   return (
     <form action={action}>
-      <SubmitButton title="Sign out" />
+      <SubmitButton title="Sign out" className={className} />
     </form>
   );
 }

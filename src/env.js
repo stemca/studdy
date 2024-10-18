@@ -15,6 +15,7 @@ export const env = createEnv({
     RESEND_API_KEY: z.string(),
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
+    DISCORD_REDIRECT_URI: z.string().url(),
   },
 
   /**
@@ -37,6 +38,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+    DISCORD_REDIRECT_URI: process.env.DISCORD_REDIRECT_URI,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

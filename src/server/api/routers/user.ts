@@ -104,7 +104,7 @@ export const userRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message:
-            "You have an account that is signed up with Google or Discord, please use those methods",
+            "You have an account that is signed up with Discord, please login with that method instead",
         });
       }
 
