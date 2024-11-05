@@ -1,4 +1,4 @@
-import type { InferSelectModel } from "drizzle-orm";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { sql } from "drizzle-orm";
 import {
@@ -139,3 +139,12 @@ export type VerificationCode = InferSelectModel<typeof verificationCodeTable>;
 export type Account = InferSelectModel<typeof accountsTable>;
 export type Course = InferSelectModel<typeof coursesTable>;
 export type Assignment = InferSelectModel<typeof assignmentsTable>;
+
+export type CreateUser = InferInsertModel<typeof userTable>;
+export type CreateSession = InferInsertModel<typeof sessionTable>;
+export type CreateVerificationCode = InferInsertModel<
+  typeof verificationCodeTable
+>;
+export type CreateAccount = InferInsertModel<typeof accountsTable>;
+export type CreateCourse = InferInsertModel<typeof coursesTable>;
+export type CreateAssignment = InferInsertModel<typeof assignmentsTable>;

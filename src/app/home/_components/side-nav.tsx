@@ -5,11 +5,9 @@ import {
   ScrollText,
   Settings,
 } from "lucide-react";
-import Link from "next/link";
 
-import { LogoutButton } from "~/app/_components/logout-btn";
-import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import SideNavElements from "./side-nav-elements";
 
 const links = [
   {
@@ -46,19 +44,7 @@ export default function SideNav() {
         stüddy club
       </CardHeader>
       <CardContent>
-        <ul className="space-y-4">
-          {links.map(({ title, href, icon }) => (
-            <li key={title}>
-              <Button variant="neutral" asChild className="w-full">
-                <Link href={href}>
-                  {icon}
-                  {title}
-                </Link>
-              </Button>
-            </li>
-          ))}
-        </ul>
-        <LogoutButton className="mt-4 w-full" />
+        <SideNavElements links={links} />
       </CardContent>
     </Card>
   );

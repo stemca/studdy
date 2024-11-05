@@ -32,6 +32,7 @@ const initialState: ActionState = {
 export default function LoginForm() {
   const [state, formAction] = useFormState(loginAction, initialState);
   const { toast } = useToast();
+
   const form = useForm<SignInType>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
