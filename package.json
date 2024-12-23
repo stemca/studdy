@@ -10,10 +10,11 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev --turbo",
-    "lint": "next lint",
+    "lint": "pnpm biome lint .",
+    "lint:fix": "pnpm biome lint -- write .",
     "start": "next start",
-    "format:check": "pnpm exec prettier . --check",
-    "format:fix": "pnpm exec prettier . --write",
+    "format": "pnpm biome format",
+    "format:fix": "pnpm biome format --write .",
     "typecheck": "tsc",
     "prepare": "husky"
   },
@@ -62,6 +63,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.10",
