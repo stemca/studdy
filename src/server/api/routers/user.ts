@@ -148,7 +148,6 @@ export const userRouter = createTRPCRouter({
           eq(verificationCodeTable.code, input.code),
         ),
       });
-      console.log(verificationCode);
 
       if (!verificationCode) {
         throw new TRPCError({
