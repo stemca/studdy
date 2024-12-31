@@ -1,0 +1,437 @@
+{
+	"version": "6",
+	"dialect": "sqlite",
+	"id": "bb6fac96-8fdf-4619-8f53-ca716a93961f",
+	"prevId": "d6c0973f-55ba-4696-80d1-4ccd9e579d5c",
+	"tables": {
+		"account_table": {
+			"name": "account_table",
+			"columns": {
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"provider_id": {
+					"name": "provider_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"provider_user_id": {
+					"name": "provider_user_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"account_table_user_id_users_table_id_fk": {
+					"name": "account_table_user_id_users_table_id_fk",
+					"tableFrom": "account_table",
+					"tableTo": "users_table",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {
+				"account_table_provider_id_provider_user_id_pk": {
+					"columns": ["provider_id", "provider_user_id"],
+					"name": "account_table_provider_id_provider_user_id_pk"
+				}
+			},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		},
+		"assignment_table": {
+			"name": "assignment_table",
+			"columns": {
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"name": {
+					"name": "name",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"description": {
+					"name": "description",
+					"type": "text(1000)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"due_date": {
+					"name": "due_date",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"points": {
+					"name": "points",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"type": {
+					"name": "type",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"course_id": {
+					"name": "course_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {
+				"assignment_user_id_idx": {
+					"name": "assignment_user_id_idx",
+					"columns": ["user_id"],
+					"isUnique": false
+				},
+				"assignment_course_id_idx": {
+					"name": "assignment_course_id_idx",
+					"columns": ["course_id"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {
+				"assignment_table_user_id_users_table_id_fk": {
+					"name": "assignment_table_user_id_users_table_id_fk",
+					"tableFrom": "assignment_table",
+					"tableTo": "users_table",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				},
+				"assignment_table_course_id_course_table_id_fk": {
+					"name": "assignment_table_course_id_course_table_id_fk",
+					"tableFrom": "assignment_table",
+					"tableTo": "course_table",
+					"columnsFrom": ["course_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {
+				"assignment_table_user_id_course_id_pk": {
+					"columns": ["user_id", "course_id"],
+					"name": "assignment_table_user_id_course_id_pk"
+				}
+			},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		},
+		"course_table": {
+			"name": "course_table",
+			"columns": {
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"id": {
+					"name": "id",
+					"type": "text(255)",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"description": {
+					"name": "description",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"start_date": {
+					"name": "start_date",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"end_date": {
+					"name": "end_date",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"credits": {
+					"name": "credits",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"code": {
+					"name": "code",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {
+				"course_user_id_idx": {
+					"name": "course_user_id_idx",
+					"columns": ["user_id"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {
+				"course_table_user_id_users_table_id_fk": {
+					"name": "course_table_user_id_users_table_id_fk",
+					"tableFrom": "course_table",
+					"tableTo": "users_table",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		},
+		"session_table": {
+			"name": "session_table",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text(255)",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"expires_at": {
+					"name": "expires_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"session_table_user_id_users_table_id_fk": {
+					"name": "session_table_user_id_users_table_id_fk",
+					"tableFrom": "session_table",
+					"tableTo": "users_table",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		},
+		"users_table": {
+			"name": "users_table",
+			"columns": {
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"id": {
+					"name": "id",
+					"type": "text(255)",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"email": {
+					"name": "email",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"password": {
+					"name": "password",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"email_verified": {
+					"name": "email_verified",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": false
+				}
+			},
+			"indexes": {
+				"users_table_email_unique": {
+					"name": "users_table_email_unique",
+					"columns": ["email"],
+					"isUnique": true
+				},
+				"users_email_idx": {
+					"name": "users_email_idx",
+					"columns": ["email"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		},
+		"verification_code_table": {
+			"name": "verification_code_table",
+			"columns": {
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"id": {
+					"name": "id",
+					"type": "text(255)",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"code": {
+					"name": "code",
+					"type": "text(6)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"email": {
+					"name": "email",
+					"type": "text(255)",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"expires_at": {
+					"name": "expires_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {
+				"verification_code_table_user_id_unique": {
+					"name": "verification_code_table_user_id_unique",
+					"columns": ["user_id"],
+					"isUnique": true
+				},
+				"verification_codes_email_idx": {
+					"name": "verification_codes_email_idx",
+					"columns": ["user_id"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {
+				"verification_code_table_user_id_users_table_id_fk": {
+					"name": "verification_code_table_user_id_users_table_id_fk",
+					"tableFrom": "verification_code_table",
+					"tableTo": "users_table",
+					"columnsFrom": ["user_id"],
+					"columnsTo": ["id"],
+					"onDelete": "cascade",
+					"onUpdate": "cascade"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		}
+	},
+	"views": {},
+	"enums": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {}
+	},
+	"internal": {
+		"indexes": {}
+	}
+}
