@@ -1,6 +1,6 @@
 export function GET() {
-  return new Response(
-    `
+	return new Response(
+		`
         <!doctype html>
         <html>
         <head>
@@ -17,25 +17,25 @@ export function GET() {
             id="api-reference"
             data-url="/spec"
             data-configuration="${JSON.stringify({
-              authentication: {
-                preferredSecurityScheme: "bearerAuth",
-                http: {
-                  bearer: {
-                    token: "default-token",
-                  },
-                },
-              },
-            }).replaceAll('"', "&quot;")}"
+							authentication: {
+								preferredSecurityScheme: "bearerAuth",
+								http: {
+									bearer: {
+										token: "default-token",
+									},
+								},
+							},
+						}).replaceAll('"', "&quot;")}"
             ></script>
 
             <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
         </body>
         </html>
     `,
-    {
-      headers: {
-        "Content-Type": "text/html",
-      },
-    }
-  );
+		{
+			headers: {
+				"Content-Type": "text/html",
+			},
+		},
+	);
 }
